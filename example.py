@@ -34,6 +34,8 @@ def main():
     # Upload the downloaded tour as an recorded activity
     a.upload_tour_gpx(SPORT.BIKE_TOURING, _DOWNLOAD_DIR + "/" + file_name)
 
+    return tours
+
 
 if __name__ == '__main__':
-    main()
+    tours = main()
