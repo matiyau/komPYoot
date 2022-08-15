@@ -42,21 +42,21 @@ class AutoFlag(IntFlag):
         return obj
 
 
-class TOUR_TYPE(AutoFlag):
+class TourType(AutoFlag):
     """Flag Enum for Tour Type (Planned, Recorded)."""
 
     PLANNED = "tour_planned"
     RECORDED = "tour_recorded"
 
 
-class TOUR_STATUS(AutoFlag):
+class TourStatus(AutoFlag):
     """Flag Enum for Tour Status (Public, Private)."""
 
     PUBLIC = "public"
     PRIVATE = "private"
 
 
-class SPORT(AutoFlag):
+class Sport(AutoFlag):
     """
     Flag Enum for Sports.
 
@@ -243,13 +243,13 @@ class API():
 
         Parameters
         ----------
-        tour_type : TOUR_TYPE or None, optional
+        tour_type : TourType or None, optional
             Bitwise OR-ed flags for filtering multiple tour types.
             The default is None.
-        tour_status : TOUR_STATUS or None, optional
+        tour_status : TourStatus or None, optional
             Bitwise OR-ed flags for filtering multiple tour statuses.
             The default is None.
-        sport : SPORT or None, optional
+        sport : Sport or None, optional
             Bitwise OR-ed flags for filtering multiple sports.
             The default is None.
 
@@ -268,8 +268,8 @@ class API():
         if (self.user_details == {}):
             raise RuntimeError("User Details Not Available. Please Sign In.")
         params = {}
-        self._add_flags_to_req_params(params, "type", tour_type, TOUR_TYPE)
-        self._add_flags_to_req_params(params, "sport_types", sport, SPORT)
+        self._add_flags_to_req_params(params, "type", tour_type, TourType)
+        self._add_flags_to_req_params(params, "sport_types", sport, Sport)
         params["page"] = 0
 
         tours = []
@@ -292,7 +292,7 @@ class API():
             if (content["page"]["totalPages"] == params["page"]):
                 break
 
-        tours = self._filt_tours(tours, "status", tour_status, TOUR_STATUS)
+        tours = self._filt_tours(tours, "status", tour_status, TourStatus)
 
         return tours
 
@@ -340,7 +340,7 @@ class API():
 
         Parameters
         ----------
-        sport : SPORT
+        sport : Sport
             Type of sport for the tour.
         file_path : str
             Path of the GPX file.
