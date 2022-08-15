@@ -6,7 +6,7 @@ Created on Tue Aug  2 12:51:22 2022.
 @author: Nishad Mandlik
 """
 
-from enum import IntFlag
+from enum import IntFlag, auto
 import requests
 import warnings
 import xml.etree.ElementTree as ET
@@ -89,6 +89,11 @@ class Sport(AutoFlag):
     SNOWBOARDING = "snowboard"
     SNOWSHOEING = "snowshoe"
     OTHER = "other"
+
+
+class TourOwner(IntFlag):
+    SELF = auto()
+    OTHER = auto()
 
 
 class API():
@@ -224,19 +229,35 @@ class API():
         if param_val:
             params_dict[param_name] = param_val
 
-    def _filt_tours(self, tours, tour_key, user_flags, flag_cls):
+    def _filt_tours_status(self, tours, user_flags):
         if (user_flags is None):
             return tours
         tours_filt = []
-        for flag in flag_cls:
+        for flag in TourStatus:
             if (flag & user_flags):
                 tours_filt += [tour for tour in tours
-                               if (tour[tour_key] == flag.flag_name)]
+                               if (tour["status"] == flag.flag_name)]
+        return tours_filt
+
+    def _filt_tours_owner(self, tours, user_flags):
+        if ((user_flags is None) or
+                (user_flags == (TourOwner.SELF | TourOwner.OTHER))):
+            return tours
+        tours_filt = []
+        if (TourOwner.SELF & user_flags):
+            tours_filt += [tour for tour in tours
+                           if (tour["_embedded"]["creator"]["username"] ==
+                               self.get_user_id())]
+
+        if (TourOwner.OTHER & user_flags):
+            tours_filt += [tour for tour in tours
+                           if (tour["_embedded"]["creator"]["username"] !=
+                               self.get_user_id())]
 
         return tours_filt
 
     def get_user_tours_list(self, tour_type=None, tour_status=None,
-                            sport=None):
+                            sport=None, tour_owner=None):
         """
         Get the list of tours for the logged-in user, according to the
         user-defined filters.
@@ -251,6 +272,10 @@ class API():
             The default is None.
         sport : Sport or None, optional
             Bitwise OR-ed flags for filtering multiple sports.
+            The default is None.
+        tour_owner: TourOwner or None, optional
+            Bitwise OR-ed flags for filtering activities according to creator
+            (self or others).
             The default is None.
 
         Raises
@@ -292,7 +317,8 @@ class API():
             if (content["page"]["totalPages"] == params["page"]):
                 break
 
-        tours = self._filt_tours(tours, "status", tour_status, TourStatus)
+        tours = self._filt_tours_status(tours, tour_status)
+        tours = self._filt_tours_owner(tours, tour_owner)
 
         return tours
 

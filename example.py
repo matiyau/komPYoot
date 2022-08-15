@@ -7,7 +7,7 @@ Created on Tue Aug  2 16:23:42 2022
 """
 
 from getpass import getpass
-from komPYoot import API, TourType, TourStatus, Sport
+from komPYoot import API, TourType, TourStatus, Sport, TourOwner
 
 _DOWNLOAD_DIR = "./"
 
@@ -22,8 +22,9 @@ def main():
 
     # Get list of tours with the given filters
     tours = a.get_user_tours_list(tour_type=TourType.PLANNED,
-                                  tour_status=TourStatus.PRIVATE,
-                                  sport=Sport.BIKE_TOURING)
+                                  tour_status=TourStatus.PUBLIC,
+                                  sport=Sport.BIKE_TOURING,
+                                  tour_owner=TourOwner.SELF)
 
     # Get the ID of the first tour in the list
     tour_id = tours[0]["id"]
