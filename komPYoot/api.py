@@ -366,7 +366,7 @@ class API():
             f.write(resp.text)
         return file_name
 
-    def upload_tour_gpx(self, sport, file_path):
+    def upload_tour_gpx(self, sport, file_path, duration=None):
         """
         Upload a GPX file as a recorded activity.
 
@@ -376,6 +376,10 @@ class API():
             Type of sport for the tour.
         file_path : str
             Path of the GPX file.
+        duration : int or None, optional
+            Time in motion (in seconds) for the tour. If None, Komoot assumes
+            the duration of the entire tour to be the time in motion. The
+            default is None.
 
         Raises
         ------
@@ -392,6 +396,8 @@ class API():
             raise RuntimeError("User Details Not Available. Please Sign In.")
         headers = {"User-Agent": "komPYoot"}
         params = {"data_type": "gpx", "sport": sport.flag_name}
+        if duration is not None:
+            params["time_in_motion"] = duration
         with open(file_path, "rb") as f:
             data = f.read()
         resp = requests.post(_TOUR_UL_GPX_URL, params=params,
