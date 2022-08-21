@@ -92,12 +92,18 @@ class Sport(AutoFlag):
 
 
 class TourOwner(IntFlag):
+    """Enum for tour owner (logged-in user or other user)."""
+
     SELF = auto()
     OTHER = auto()
 
 
 class API():
-    """Class for interfacing with the Komoot API."""
+    """
+    Class for interfacing with the Komoot API.
+
+    Refer to https://static.komoot.de/doc/external-api/v007/index.html
+    """
 
     def __init__(self):
         """
@@ -378,8 +384,8 @@ class API():
 
         Returns
         -------
-        resp : TYPE
-            DESCRIPTION.
+        bool
+            True, if upload is successful, False otherwise.
 
         """
         if (self.user_details == {}):
