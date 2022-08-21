@@ -398,8 +398,16 @@ class API():
                              headers=headers, data=data,
                              auth=(self.user_details["user_id"],
                                    self.user_details["token"]))
-        if (resp.status_code != 201):
+        if (resp.status_code == 201):
+            print("Upload Successful. New tour created (ID: %d)." %
+                  resp.json()["id"])
+            return True
+        elif (resp.status_code == 202):
+            print("Upload Successful. New tour not created since upload is a "
+                  "ducplicate of an existing tour (ID: %d)." %
+                  resp.json()["id"])
+            return True
+        else:
             warnings.warn("Upload Failed.\nError Code: %d" %
                           resp.status_code)
             return False
-        return True
