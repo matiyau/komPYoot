@@ -8,7 +8,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="komPYoot",  # Replace with your own username
-    version="1.0.1",
+    version="1.0.3",
     author="Nishad Mandlik",
     author_email="mandliksg@gmail.com",
     description="Python Interface for Komoot API",
