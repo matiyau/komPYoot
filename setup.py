@@ -1,6 +1,8 @@
+import os
 import setuptools
+import sys
 
-with open('requirements.txt') as f:
+with open("requirements.txt") as f:
     required = f.read().splitlines()
 
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -8,7 +10,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="komPYoot",  # Replace with your own username
-    version="1.0.4",
+    version="1.0.5",
     author="Nishad Mandlik",
     author_email="mandliksg@gmail.com",
     description="Python Interface for Komoot API",
@@ -26,5 +28,5 @@ setuptools.setup(
     ],
     packages=setuptools.find_packages(),
     install_reqs=required,
-    python_requires=">=3.6",
+    python_requires=">=3.10",
 )
