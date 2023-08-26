@@ -350,6 +350,33 @@ class API():
             file_name if download is successful, None otherwise.
 
         """
+        gpx_txt = self.download_tour_gpx_string(tour_id)
+        gpx_tree = ET.fromstring(gpx_txt)
+        file_name = gpx_tree[0][0].text + ".gpx"
+        with open(download_dir + "/" + file_name, "w") as f:
+            f.write(gpx_txt)
+        return file_name
+
+    def download_tour_gpx_string(self, tour_id):
+        """
+        Download GPX string of tour.
+
+        Parameters
+        ----------
+        tour_id : str
+            Tour ID.
+
+        Raises
+        ------
+        RuntimeError
+            If no user is logged-in.
+
+        Returns
+        -------
+        str or None
+            gpx_string if download is successful, None otherwise.
+
+        """
         if (self.user_details == {}):
             raise RuntimeError("User Details Not Available. Please Sign In.")
         resp = requests.get(_TOUR_DL_GPX_URL % tour_id,
@@ -360,11 +387,7 @@ class API():
                           resp.status_code)
             return None
         gpx_txt = resp.text
-        gpx_tree = ET.fromstring(gpx_txt)
-        file_name = gpx_tree[0][0].text + ".gpx"
-        with open(download_dir + "/" + file_name, "w") as f:
-            f.write(resp.text)
-        return file_name
+        return gpx_txt
 
     def upload_tour_gpx(self, sport, file_path, duration=None):
         """
