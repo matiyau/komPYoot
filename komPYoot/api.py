@@ -328,7 +328,7 @@ class API():
 
         return tours
 
-    def download_tour_gpx(self, tour_id, download_dir):
+    def download_tour_gpx_file(self, tour_id, download_dir):
         """
         Download tour in the GPX format.
 

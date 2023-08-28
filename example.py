@@ -30,7 +30,7 @@ def main():
     tour_id = tours[0]["id"]
 
     # Download the tour to the specified directory
-    file_name = a.download_tour_gpx(tour_id, _DOWNLOAD_DIR)
+    file_name = a.download_tour_gpx_file(tour_id, _DOWNLOAD_DIR)
 
     # Upload the downloaded tour as an recorded activity
     a.upload_tour_gpx(Sport.BIKE_TOURING, _DOWNLOAD_DIR + "/" + file_name,
